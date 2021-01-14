@@ -3,12 +3,9 @@ from pythonosc import dispatcher
 from pythonosc import osc_server
 import time
 import math
+import ConfigProvider
 
-IP = "192.168.1.141"
-AMCP_PORT = 5250
-OSC_PORT = 6250
-CCG_CHANNEL = 1
-CCG_LAYER = 10
+config = ConfigProvider.getCurrentSettings()
 
 class CasparCGService:
     def __init__(self, sharedData):
@@ -18,18 +15,18 @@ class CasparCGService:
         try:
             # Establish AMCP Connection
             client = Client()
-            client.connect(IP, AMCP_PORT)
+            client.connect(config['server'], config['port_amcp'])
 
             # Create OSC Server
             disp = dispatcher.Dispatcher()
-            disp.map('/channel/' + str(CCG_CHANNEL) + '/stage/layer/' + str(CCG_LAYER) + '/file/time', self.handleOSCCommand)
+            disp.map('/channel/' + str(config['channel']) + '/stage/layer/' + str(config['layer']) + '/file/time', self.handleOSCCommand)
 
             server = osc_server.ThreadingOSCUDPServer(
-                ("0.0.0.0", OSC_PORT), disp)
+                ("0.0.0.0", config['port_osc']), disp)
             print("Serving on {}".format(server.server_address))
             server.serve_forever()
         except:
-            print("Fehler: Konnte keine Verbindung zu CasparCG-Server herstellen")
+            print("Fehler: Konnte keine Verbindung zu CasparCG-Server %s:%s herstellen" % (config['server'], config['port_amcp']))
 
     def handleOSCCommand(self, *args):
         # args[0] is endpoint

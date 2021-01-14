@@ -1,5 +1,9 @@
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
 from datetime import datetime
+import ConfigProvider as config
+import json
+
+from main import restartCasparCG
 
 PORT = 3000
 DIRECTORY = "http/"
@@ -13,8 +17,12 @@ class WebServerService:
         # set the project root directory as the static folder, you can set others.
         app = Flask(__name__)
 
-        @app.route('/')
+        @app.route('/', methods=['GET', 'POST'])
         def root():
+            if request.method == 'POST':
+                for key in request.form:
+                    config.UpdateSetting(key, request.form.get(key))
+                # TODO: Restart CasparCG Process
             return send_from_directory(DIRECTORY, 'index.html')
 
         @app.route('/styles.css')
@@ -34,6 +42,10 @@ class WebServerService:
         def stop_show():
             self.sharedData['showRunning'] = False
             return "OK"
+
+        @app.route('/api/v1/settings')
+        def get_settings():
+            return jsonify(config.getCurrentSettings())
 
         app.run(host="0.0.0.0", port=PORT)
             

@@ -14,6 +14,8 @@ logging.getLogger().setLevel(logging.ERROR)
 manager = multiprocessing.Manager()
 sharedData = manager.dict()
 
+casparCGProcess = None
+
 def startScreen():
     window = screen.ScreenService(sharedData)
     window.start()
@@ -34,6 +36,13 @@ def startShowTime():
     server = ShowTime.ShowTimeService(sharedData)
     server.start()
 
+def restartCasparCG():
+    casparCGProcess.terminate()
+    startCasparCGService()
+
+def startCasparCGService():
+    casparCGProcess = multiprocessing.Process(target=startCasparCG)
+    casparCGProcess.start()
 
 if __name__ == "__main__":
     screenProcess = multiprocessing.Process(target=startScreen)
@@ -42,8 +51,7 @@ if __name__ == "__main__":
     clockProcess = multiprocessing.Process(target=startClock)
     clockProcess.start()
 
-    casparCGProcess = multiprocessing.Process(target=startCasparCG)
-    casparCGProcess.start()
+    startCasparCGService()
 
     webServerProcess = multiprocessing.Process(target=startWebServer)
     webServerProcess.start()
