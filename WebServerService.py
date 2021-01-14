@@ -3,6 +3,9 @@ from datetime import datetime
 import ConfigProvider as config
 import json
 
+import subprocess
+import shlex
+
 from main import restartCasparCG
 
 PORT = 3000
@@ -46,6 +49,18 @@ class WebServerService:
         @app.route('/api/v1/settings')
         def get_settings():
             return jsonify(config.getCurrentSettings())
+
+        @app.route('/shutdown')
+        def shutdown():
+            cmd = shlex.split("sudo shutdown -h now")
+            subprocess.call(cmd)
+            return "Wird heruntergefahren..."
+
+        @app.route('/reboot')
+        def reboot():
+            cmd = shlex.split("sudo reboot")
+            subprocess.call(cmd)
+            return "Wird neu gestartet..."
 
         app.run(host="0.0.0.0", port=PORT)
             
