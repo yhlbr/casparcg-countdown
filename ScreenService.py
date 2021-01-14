@@ -13,6 +13,8 @@ class ScreenService:
         self.window.bind("<F11>", self.toggleFullScreen)
         self.window.bind("<Escape>", self.quitFullScreen)
 
+	self.window.config(cursor="none")
+
         self.buildBaseWindow()
         self.window.after(100, self.updateWindowLabels)
         self.window.mainloop()
