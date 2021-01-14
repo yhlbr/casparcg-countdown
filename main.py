@@ -3,6 +3,7 @@ import ScreenService as screen
 import ClockService as clock
 import CasparCGService as CasparCG
 import WebServerService as WebServer
+import ShowTimeService as ShowTime
 import multiprocessing
 import time
 import logging
@@ -29,6 +30,10 @@ def startWebServer():
     server = WebServer.WebServerService(sharedData)
     server.start()
 
+def startShowTime():
+    server = ShowTime.ShowTimeService(sharedData)
+    server.start()
+
 
 if __name__ == "__main__":
     screenProcess = multiprocessing.Process(target=startScreen)
@@ -36,16 +41,18 @@ if __name__ == "__main__":
 
     clockProcess = multiprocessing.Process(target=startClock)
     clockProcess.start()
-    
+
     casparCGProcess = multiprocessing.Process(target=startCasparCG)
     casparCGProcess.start()
-    
-    
+
     webServerProcess = multiprocessing.Process(target=startWebServer)
     webServerProcess.start()
-    
+
+    showTimeProcess = multiprocessing.Process(target=startShowTime)
+    showTimeProcess.start()
+
     screenProcess.join()
     clockProcess.join()
     casparCGProcess.join()
     webServerProcess.join()
-    print("Window started")
+    showTimeProcess.join()

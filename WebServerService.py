@@ -27,6 +27,12 @@ class WebServerService:
         @app.route('/api/v1/show/start')
         def start_show():
             self.sharedData['showStartTime'] = datetime.now()
+            self.sharedData['showRunning'] = True
+            return "OK"
+
+        @app.route('/api/v1/show/stop')
+        def stop_show():
+            self.sharedData['showRunning'] = False
             return "OK"
 
         app.run(host="0.0.0.0", port=PORT)

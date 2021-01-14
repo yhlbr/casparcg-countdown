@@ -15,18 +15,21 @@ class CasparCGService:
         self.sharedData = sharedData
 
     def start(self):
-        # Establish AMCP Connection
-        client = Client()
-        client.connect(IP, AMCP_PORT)
+        try:
+            # Establish AMCP Connection
+            client = Client()
+            client.connect(IP, AMCP_PORT)
 
-        # Create OSC Server
-        disp = dispatcher.Dispatcher()
-        disp.map('/channel/' + str(CCG_CHANNEL) + '/stage/layer/' + str(CCG_LAYER) + '/file/time', self.handleOSCCommand)
+            # Create OSC Server
+            disp = dispatcher.Dispatcher()
+            disp.map('/channel/' + str(CCG_CHANNEL) + '/stage/layer/' + str(CCG_LAYER) + '/file/time', self.handleOSCCommand)
 
-        server = osc_server.ThreadingOSCUDPServer(
-            ("0.0.0.0", OSC_PORT), disp)
-        print("Serving on {}".format(server.server_address))
-        server.serve_forever()
+            server = osc_server.ThreadingOSCUDPServer(
+                ("0.0.0.0", OSC_PORT), disp)
+            print("Serving on {}".format(server.server_address))
+            server.serve_forever()
+        except:
+            print("Fehler: Konnte keine Verbindung zu CasparCG-Server herstellen")
 
     def handleOSCCommand(self, *args):
         # args[0] is endpoint

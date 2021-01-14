@@ -1,0 +1,16 @@
+* {
+    font-family: sans-serif;
+}
+
+.container {
+    margin: 0 200px;
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}

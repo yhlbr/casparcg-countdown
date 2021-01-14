@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>CasparCG Countdown</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello World</h1>
+    <div class="container">
+        <h1>Konfiguration</h1>
+        <form action="/" method="POST">
+            <div class="form-row">
+                <label for="server">Server</label>
+                <input type="text" name="server" id="server">
+            </div>
+            <div class="form-row">
+                <label for="port_amcp">AMCP Port</label>
+                <input type="text" name="port_amcp" id="port_amcp">
+            </div>
+            <div class="form-row">
+                <label for="port_osc">OSC Port</label>
+                <input type="text" name="port_osc" id="port_osc">
+            </div>
+            <div class="form-row">
+                <label for="channel">Channel</label>
+                <input type="text" name="channel" id="channel">
+            </div>
+            <div class="form-row">
+                <label for="layer">Layer</label>
+                <input type="text" name="layer" id="layer">
+            </div>
+            <div class="form-row">
+                <button type="submit">Speichern</button>
+            </div>
+        </form>
+    </div>
+    <script src="index.js"></script>
 </body>
 </html>
