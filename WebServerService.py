@@ -1,4 +1,5 @@
 from flask import Flask, request, send_from_directory
+from datetime import datetime
 
 PORT = 3000
 DIRECTORY = "http/"
@@ -22,6 +23,11 @@ class WebServerService:
         @app.route('/index.js')
         def send_js():
             return send_from_directory(DIRECTORY, 'index.js')
+
+        @app.route('/api/v1/show/start')
+        def start_show():
+            self.sharedData['showStartTime'] = datetime.now()
+            return "OK"
 
         app.run(host="0.0.0.0", port=PORT)
             
