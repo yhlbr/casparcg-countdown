@@ -39,7 +39,8 @@ class CasparCGService:
         formattedTime = time.strftime('%H:%M:%S', time.gmtime(countdownTime))
 
         # Add Milliseconds manually
-        lastDigits = math.trunc((countdownTime - math.trunc(countdownTime)) * 100)
+	# Divide by 2 to convert from 0 - 100 ms to 0 - 50 frames
+        lastDigits = math.trunc((countdownTime - math.trunc(countdownTime)) * 100 / 2)
         if (lastDigits < 10):
             lastDigits = "0" + str(lastDigits)
         formattedTime += ':' + str(lastDigits)

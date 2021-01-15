@@ -6,8 +6,6 @@ import json
 import subprocess
 import shlex
 
-from main import restartCasparCG
-
 PORT = 3000
 DIRECTORY = "http/"
 
