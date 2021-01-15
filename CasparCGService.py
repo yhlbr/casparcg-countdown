@@ -4,6 +4,7 @@ from pythonosc import osc_server
 import time
 import math
 import ConfigProvider
+import traceback
 
 config = ConfigProvider.getCurrentSettings()
 
@@ -22,11 +23,12 @@ class CasparCGService:
             disp.map('/channel/' + str(config['channel']) + '/stage/layer/' + str(config['layer']) + '/file/time', self.handleOSCCommand)
 
             server = osc_server.ThreadingOSCUDPServer(
-                ("0.0.0.0", config['port_osc']), disp)
+                ("0.0.0.0", int(config['port_osc'])), disp)
             print("Serving on {}".format(server.server_address))
             server.serve_forever()
         except:
             print("Fehler: Konnte keine Verbindung zu CasparCG-Server %s:%s herstellen" % (config['server'], config['port_amcp']))
+            print(traceback.format_exc())
 
     def handleOSCCommand(self, *args):
         # args[0] is endpoint
@@ -42,8 +44,12 @@ class CasparCGService:
             lastDigits = "0" + str(lastDigits)
         formattedTime += ':' + str(lastDigits)
 
+        countDownPercentage = curTime / totalTime * 100
+
         if totalTime - curTime <= 0.1:
             formattedTime = '00:00:00:00'
+            countDownPercentage = 0
 
         self.sharedData['countDownString'] = formattedTime
+        self.sharedData['countDownPercentage'] = countDownPercentage
 

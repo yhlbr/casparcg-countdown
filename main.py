@@ -16,24 +16,31 @@ sharedData = manager.dict()
 
 casparCGProcess = None
 
+processes = []
+
 def startScreen():
     window = screen.ScreenService(sharedData)
+    processes.append(window)
     window.start()
 
 def startClock():
     time = clock.ClockService(sharedData)
+    processes.append(time)
     time.start()
 
 def startCasparCG():
     server = CasparCG.CasparCGService(sharedData)
+    processes.append(server)
     server.start()
 
 def startWebServer():
     server = WebServer.WebServerService(sharedData)
+    processes.append(server)
     server.start()
 
 def startShowTime():
     server = ShowTime.ShowTimeService(sharedData)
+    processes.append(server)
     server.start()
 
 def restartCasparCG():
@@ -42,6 +49,7 @@ def restartCasparCG():
 
 def startCasparCGService():
     casparCGProcess = multiprocessing.Process(target=startCasparCG)
+    processes.append(casparCGProcess)
     casparCGProcess.start()
 
 if __name__ == "__main__":

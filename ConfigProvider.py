@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 import os.path
 
-CONFIG_FILENAME = "config.ini"
+CONFIG_FILENAME = os.path.dirname(os.path.realpath(__file__)) + "/config.ini"
 
 def getDefaultSettings():
     config_object = ConfigParser()

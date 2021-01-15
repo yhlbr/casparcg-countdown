@@ -16,7 +16,7 @@ class ScreenService:
         self.window.config(cursor="none")
 
         self.buildBaseWindow()
-        self.window.after(100, self.updateWindowLabels)
+        self.window.after(50, self.updateWindowLabels)
         self.window.mainloop()
 
     def updateWindowLabels(self):
@@ -26,6 +26,15 @@ class ScreenService:
             self.labelCountDown.config(text=self.sharedData['countDownString'])
         if 'showTimeString' in self.sharedData:
             self.labelShowTime.config(text=self.sharedData['showTimeString'])
+
+        if 'countDownPercentage' in self.sharedData:
+            width = int(self.window.winfo_screenwidth() * (self.sharedData['countDownPercentage'] / 100))
+            if (width == 0):
+                self.canvas.config(bg="black")
+            else:
+                self.canvas.config(bg="#00FF00")
+
+            self.canvas.config(width=width)
 
         # Keep on updating window
         self.window.after(100, self.updateWindowLabels)
@@ -39,12 +48,13 @@ class ScreenService:
         self.window.attributes("-fullscreen", self.fullScreenState)
 
     def buildBaseWindow(self):
-        self.window.rowconfigure((0,1,2), weight=1)
+        self.window.rowconfigure((0,1,2,3), weight=1)
         self.window.columnconfigure(0, weight=1)
 
         self.buildLabel("labelCurTime", "00:00:00", 0, "#ff0000")
         self.buildLabel("labelCountDown", "00:00:00:00", 1, "#00ff00")
-        self.buildLabel("labelShowTime", "00:00:00", 2)
+        self.buildCanvas()
+        self.buildLabel("labelShowTime", "00:00:00", 3)
 
     def buildLabel(self, name, text, row, color="#ffffff"):
         label = tk.Label(
@@ -53,6 +63,10 @@ class ScreenService:
         label.grid(row=row, column=0, sticky="EW")
         # set self.{name} = label
         setattr(self, name, label)
+
+    def buildCanvas(self):
+        self.canvas = tk.Canvas(self.window, bg="black", width=0, height=15, highlightthickness=0)
+        self.canvas.grid(row=2, column=0, sticky="W")
 
     def getMainFont(self):
         font = tkFont.Font(size=230, family="alarm clock")
